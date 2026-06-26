@@ -1,3 +1,113 @@
+server:
+  port: ${SERVER_PORT:8088}
+  servlet:
+    context-path: ${SERVER_SERVLET_CONTEXT_PATH:/pre-project-sizing/api}
 spring:
   application:
-    name: sizing
+    name: ${SPRING_APPLICATION_NAME:pre_project_sizing}
+  main:
+    allow-circular-references: true
+    allow-bean-definition-overriding: true
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: org.postgresql.Driver
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/sizing_project}
+    username: ${DB_USERNAME:app_user}
+    password: ${DB_PASSWORD:app_password}
+    hikari:
+      minimum-idle: 5
+      idle-timeout: 600000
+      maximum-pool-size: 50
+      auto-commit: false
+      pool-name: HikariCorePool
+      max-lifetime: 1800000
+      connection-timeout: 30000
+  jpa:
+    open-in-view: false
+    show-sql: true
+    properties:
+      hibernate.id.new_generator_mappings: true
+      hibernate.connection.provider_disables_autocommit: true
+      hibernate.cache.use_second_level_cache: false
+      hibernate.cache.use_query_cache: false
+      hibernate.generate_statistics: false
+      hibernate.order_inserts: true
+      hibernate.order_updates: true
+      hibernate.query.fail_on_pagination_over_collection_fetch: true
+      hibernate.query.in_clause_parameter_padding: true
+    hibernate:
+      format_sql: true
+      ddl-auto: none
+      jdbc.batch_size: 50
+      connection.release_mode: after_transaction
+      package_to_scan: vn.gtel.api
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+springdoc:
+  swagger-ui:
+    operationsSorter: method
+    path: /swagger-ui.html
+  api-docs:
+    path: /api-docs
+logging:
+  level:
+    root: INFO
+redis:
+  config-file: ${REDIS_CONFIG_FILE:./config/redis.yaml}
+system:
+  configurations:
+    cors:
+      allow-credentials: true
+      allowed-methods:
+        - GET
+        - POST
+        - PUT
+        - PATCH
+        - DELETE
+        - OPTIONS
+      allowed-header:
+        - Authorization
+        - Origin
+        - Content-Type
+        - Accept
+        - Accept-Encoding
+        - Accept-Language
+        - Access-Control-Allow-Origin
+        - Access-Control-Allow-Headers
+        - Access-Control-Request-Method
+        - X-Requested-With
+        - X-Auth-Token
+        - X-Xsrf-Token
+        - Cache-Control
+        - Id-Token
+      exposed-header:
+        - X-Xsrf-Token
+        - X-Counter
+      url-based-pattern-cors-configuration-source: '/**'
+      allowed-origin-pattern:
+        - http://localhost:3000
+        - http://localhost:4200
+        - http://localhost:5173
+    uri-white-list:
+      - '/swagger-ui.html'
+      - '/swagger/*'
+      - '/swagger-ui/*'
+      - '/swagger/v3/api/docs'
+      - '/swagger/v3/api/docs/*'
+      - '/api-docs'
+      - '/api-docs/*'
+      - '/login'
+      - '/sign-up'
+      - '/public/**'
+      - '/introspect'
+      - '/api/categories/**'
+      - '/api/**'
+      - '/auth/login'
+jwt:
+  secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+  expiration: ${JWT_EXPIRATION:86400000}
+
+grpc:
+  server:
+    port: 9090
+    address: "*"
+    enable-reflection: true
