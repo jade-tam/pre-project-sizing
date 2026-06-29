@@ -42,7 +42,7 @@ public class AuthController {
 
     @PostMapping("/logout")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ApiResponse logout() {
+    public ApiResponse<Void> logout() {
         authService.logout();
         ResponseCode code = ResponseCode.SUCCESS;
         return ApiResponse.success(HttpStatus.OK, code.name(), messageService.get(code.getMessageKey()), null);

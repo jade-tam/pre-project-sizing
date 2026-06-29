@@ -1,8 +1,9 @@
 package vn.gtel.pm2.sizing.dto.common;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.http.HttpStatus;
-import vn.gtel.pm2.sizing.enums.ResponseCode;
 
 import java.time.Instant;
 import java.util.Map;
