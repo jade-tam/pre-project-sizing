@@ -7,6 +7,7 @@ import vn.gtel.pm2.sizing.enums.ResponseCode;
 import java.time.Instant;
 import java.util.Map;
 
+@Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ApiResponse<T> {
     private boolean success;
@@ -17,24 +18,24 @@ public class ApiResponse<T> {
     private Map<String, String> errors;
     private Instant timestamp;
 
-    public static <T> ApiResponse<T> success(HttpStatus status, ResponseCode responseCode, T data) {
+    public static <T> ApiResponse<T> success(HttpStatus status, String code, String message, T data) {
         return new ApiResponse<>(
                 true,
                 status.value(),
-                responseCode.getCode(),
-                responseCode.getDefaultMessage(),
+                code,
+                message,
                 data,
                 null,
                 Instant.now()
         );
     }
 
-    public static <T> ApiResponse<T> error(HttpStatus status, ResponseCode responseCode, Map<String, String> errors) {
+    public static <T> ApiResponse<T> error(HttpStatus status, String code, String message, Map<String, String> errors) {
         return new ApiResponse<>(
                 false,
                 status.value(),
-                responseCode.getCode(),
-                responseCode.getDefaultMessage(),
+                code,
+                message,
                 null,
                 errors,
                 Instant.now()

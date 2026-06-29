@@ -33,7 +33,7 @@ Stores application accounts and roles.
 | username | text | Unique login name |
 | password_hash | text | Stored hash, never plain text |
 | full_name | text | Display name for the user |
-| role | text | `ADMIN` or `USER` |
+| email | text | user email |
 | created_at | timestamptz | Required on every table |
 | updated_at | timestamptz | Required on every table |
 

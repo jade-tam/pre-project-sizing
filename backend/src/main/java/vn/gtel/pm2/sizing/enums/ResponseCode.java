@@ -1,23 +1,20 @@
 package vn.gtel.pm2.sizing.enums;
 
 public enum ResponseCode {
-    SUCCESS("SUCCESS", "Thành công"),
-    VALIDATION_FAILED("VALIDATION_FAILED", "Dữ liệu không đúng cấu trúc"),
-    INTERNAL_SERVER_ERROR("INTERNAL_SERVER_ERROR", "Lỗi hệ thống");
+    // Success
+    SUCCESS,
+    ACCOUNT_CREATED,
 
-    private String code;
-    private String defaultMessage;
+    // Errors
+    VALIDATION_FAILED,
+    INTERNAL_SERVER_ERROR,
+    USERNAME_ALREADY_EXIST,
+    USER_NOT_FOUND,
+    INVALID_CREDENTIALS,
+    INVALID_REFRESH_TOKEN,
+    EMAIL_ALREADY_EXIST;
 
-    ResponseCode(String code, String defaultMessage) {
-        this.code = code;
-        this.defaultMessage = defaultMessage;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public String getDefaultMessage() {
-        return defaultMessage;
+    public String getMessageKey() {
+        return name();
     }
 }
