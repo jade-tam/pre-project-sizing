@@ -13,7 +13,7 @@ services:
       - "5432:5432"
 
     volumes:
-      - /srv/sizing-project/postgresql/data:/var/lib/postgresql/data
+      - ./postgres_data:/var/lib/postgresql/data
 
   backend:
     build: ./backend
@@ -22,7 +22,7 @@ services:
 
     environment:
       DB_URL: jdbc:postgresql://postgres:5432/${DB_NAME}
-      DB_USER: ${DB_USER}
+      DB_USERNAME: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
 
     ports:

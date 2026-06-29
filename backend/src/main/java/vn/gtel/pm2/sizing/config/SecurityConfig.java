@@ -29,8 +29,13 @@ public class SecurityConfig {
                 .cors(cors -> {
                 }) // use CorsConfigurationSource bean
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                    "/swagger-ui/**",
+                                    "/v3/api-docs/**",
+                                    "/swagger-ui.html",
+                                    "/api-docs/**"
+                            ).permitAll()
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
