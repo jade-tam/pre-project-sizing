@@ -38,3 +38,15 @@ Frontend mặc định chạy qua Vite ở port cấu hình trong `vite.config.t
 cd backend && mvn -DskipTests package
 cd frontend && npm run build
 ```
+
+## Deployment lên ubuntu
+
+Frontend, backend và postgresql database chạy qua docker compose.
+
+Copy deploy/.env.example thành deploy/.env và chỉnh lại giá trị env cho docker compose.
+
+Chạy deploy/deploy.sh để build files, copy .env và các file đã build lên ubuntu server sau đó chạy docker compose:
+
+```bash
+./deploy/deploy.sh <ubuntu-username> <server-ip>
+```
