@@ -1,6 +1,7 @@
 package vn.gtel.pm2.sizing.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,6 +22,7 @@ import vn.gtel.pm2.sizing.exception.ResourceNotFoundException;
 import vn.gtel.pm2.sizing.repository.UserRepository;
 import vn.gtel.pm2.sizing.security.JwtService;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -37,6 +39,8 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public AuthResponse register(AuthRegisterRequest request) {
 
+        log.info("Registering new user username={} email={}", request.getUsername(), request.getEmail());
+
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new BusinessException(ResponseCode.USERNAME_ALREADY_EXIST);
         }
@@ -45,14 +49,17 @@ public class AuthServiceImpl implements AuthService {
             throw new BusinessException(ResponseCode.EMAIL_ALREADY_EXIST);
         }
 
-        User savedUser = new User(request.getUsername(), passwordEncoder.encode(request.getPassword()), request.getFullName(), request.getEmail(), true);
+        User savedUser = userRepository.save(
+                new User(request.getUsername(), passwordEncoder.encode(request.getPassword()), request.getFullName(), request.getEmail(), true)
+        );
+
+        log.info("Registered user username={} email={} with id={}", savedUser.getUsername(), savedUser.getEmail(), savedUser.getId());
 
         return new AuthResponse(
                 jwtService.generateAccessToken(savedUser),
                 jwtService.generateRefreshToken(savedUser),
                 AppConstants.JWT_TOKEN_TYPE,
                 accessTokenExpirationSeconds
-
         );
     }
 
