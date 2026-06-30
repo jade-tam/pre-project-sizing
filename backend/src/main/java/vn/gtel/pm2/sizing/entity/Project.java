@@ -29,6 +29,7 @@ public class Project {
     @Column(nullable = false)
     private String description;
 
+    @Setter
     @ManyToMany
     @JoinTable(
             name = "project_catalog_component_seletions",
