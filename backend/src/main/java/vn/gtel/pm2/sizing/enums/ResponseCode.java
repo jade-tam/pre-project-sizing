@@ -3,6 +3,8 @@ package vn.gtel.pm2.sizing.enums;
 public enum ResponseCode {
     // Success
     SUCCESS,
+    NO_CONTENT,
+    PROJECT_CREATED,
     ACCOUNT_CREATED,
 
     // Errors
@@ -13,7 +15,8 @@ public enum ResponseCode {
     INVALID_CREDENTIALS,
     INVALID_REFRESH_TOKEN,
     EMAIL_ALREADY_EXIST,
-    CATALOG_COMPONENT_NOT_FOUND;
+    CATALOG_COMPONENT_NOT_FOUND,
+    PROJECT_NOT_FOUND;
 
     public String getMessageKey() {
         return name();

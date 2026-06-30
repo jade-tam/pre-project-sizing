@@ -10,8 +10,12 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ProjectAssumption extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long projectId;
+
+    @MapsId
+    @OneToOne
+    @JoinColumn(name = "project_id")
+    private Project project;
 
     @Setter
     @Column(nullable = false)
@@ -52,4 +56,18 @@ public class ProjectAssumption extends BaseEntity {
     @Setter
     @Column(nullable = false)
     private Float authRatio;
+
+    public ProjectAssumption(Project project, Integer concurrentUsers, Float headroom, Float requestsPerUserPerSecond, Float apiCallsPerRequest, Float dbRatioPerRequest, Float searchRatioPerRequest, Float cacheRatioPerRequest, Float kafkaRatioPerRequest, Integer logBytesPerRequest, Float authRatio) {
+        this.project = project;
+        this.concurrentUsers = concurrentUsers;
+        this.headroom = headroom;
+        this.requestsPerUserPerSecond = requestsPerUserPerSecond;
+        this.apiCallsPerRequest = apiCallsPerRequest;
+        this.dbRatioPerRequest = dbRatioPerRequest;
+        this.searchRatioPerRequest = searchRatioPerRequest;
+        this.cacheRatioPerRequest = cacheRatioPerRequest;
+        this.kafkaRatioPerRequest = kafkaRatioPerRequest;
+        this.logBytesPerRequest = logBytesPerRequest;
+        this.authRatio = authRatio;
+    }
 }

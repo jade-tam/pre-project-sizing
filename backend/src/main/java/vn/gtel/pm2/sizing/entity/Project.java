@@ -10,14 +10,14 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Project {
+public class Project extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Setter
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "owner_user_id", nullable = false)
     private User owner;
 
@@ -30,7 +30,7 @@ public class Project {
     private String description;
 
     @Setter
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "project_catalog_component_seletions",
             joinColumns = @JoinColumn(name = "project_id"),
@@ -40,4 +40,18 @@ public class Project {
             )
     )
     private List<CatalogComponent> componentList;
+
+    @Setter
+    @OneToOne(mappedBy = "project",
+            cascade = CascadeType.ALL, // When doing sth to parent, do it to the child too
+            orphanRemoval = true) // remove any userProfile that is not belong to any user
+    private ProjectAssumption projectAssumption;
+
+    public Project(User owner, String name, String description, List<CatalogComponent> componentList, ProjectAssumption projectAssumption) {
+        this.owner = owner;
+        this.name = name;
+        this.description = description;
+        this.componentList = componentList;
+        this.projectAssumption = projectAssumption;
+    }
 }

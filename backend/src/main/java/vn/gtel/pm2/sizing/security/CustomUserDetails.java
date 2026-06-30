@@ -1,6 +1,7 @@
 package vn.gtel.pm2.sizing.security;
 
 import jakarta.annotation.Nullable;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,6 +10,7 @@ import vn.gtel.pm2.sizing.entity.User;
 import java.util.Collection;
 import java.util.List;
 
+@Getter
 public class CustomUserDetails implements UserDetails {
 
     private final User user;
@@ -39,6 +41,4 @@ public class CustomUserDetails implements UserDetails {
     public boolean isEnabled() {
         return user.isActive() && !user.isDeleted();
     }
-
-
 }

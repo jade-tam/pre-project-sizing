@@ -32,7 +32,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<ApiResponse<Void>> handleBusiness(ResourceNotFoundException ex) {
+    public ResponseEntity<ApiResponse<Void>> handleBusiness(BusinessException ex) {
 
         ResponseCode code = ex.getResponseCode();
 

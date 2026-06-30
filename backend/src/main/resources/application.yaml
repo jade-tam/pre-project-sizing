@@ -43,7 +43,7 @@ spring:
       package_to_scan: vn.gtel.api
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   messages:
-    use-code-as-default-message: false
+    use-code-as-default-message: true
     encoding: UTF-8
 springdoc:
   swagger-ui:
@@ -108,7 +108,7 @@ system:
 security:
   jwt:
     secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
-    access-token-expiration: 900      # 15 minutes
+    access-token-expiration: 9000      # 15 minutes
     refresh-token-expiration: 604800   # 7 days
 
 grpc:

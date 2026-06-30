@@ -44,7 +44,7 @@ public class AuthController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ApiResponse<Void> logout() {
         authService.logout();
-        ResponseCode code = ResponseCode.SUCCESS;
-        return ApiResponse.success(HttpStatus.OK, code.name(), messageService.get(code.getMessageKey()), null);
+        ResponseCode code = ResponseCode.NO_CONTENT;
+        return ApiResponse.success(HttpStatus.NO_CONTENT, code.name(), messageService.get(code.getMessageKey()), null);
     }
 }
