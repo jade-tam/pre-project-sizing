@@ -37,7 +37,7 @@ spring:
       hibernate.query.in_clause_parameter_padding: true
     hibernate:
       format_sql: true
-      ddl-auto: none
+      ddl-auto: update
       jdbc.batch_size: 50
       connection.release_mode: after_transaction
       package_to_scan: vn.gtel.api
