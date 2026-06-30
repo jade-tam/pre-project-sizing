@@ -1,4 +1,4 @@
-package vn.gtel.pm2.sizing.service;
+package vn.gtel.pm2.sizing.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +21,7 @@ import vn.gtel.pm2.sizing.exception.BusinessException;
 import vn.gtel.pm2.sizing.exception.ResourceNotFoundException;
 import vn.gtel.pm2.sizing.repository.UserRepository;
 import vn.gtel.pm2.sizing.security.JwtService;
+import vn.gtel.pm2.sizing.service.AuthService;
 
 @Slf4j
 @Service
