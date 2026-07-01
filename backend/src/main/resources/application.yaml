@@ -37,7 +37,7 @@ spring:
       hibernate.query.in_clause_parameter_padding: true
     hibernate:
       format_sql: true
-      ddl-auto: update
+      ddl-auto: validate
       jdbc.batch_size: 50
       connection.release_mode: after_transaction
       package_to_scan: vn.gtel.api
@@ -54,6 +54,7 @@ springdoc:
 logging:
   level:
     root: INFO
+    org.flywaydb: DEBUG
 redis:
   config-file: ${REDIS_CONFIG_FILE:./config/redis.yaml}
 system:
