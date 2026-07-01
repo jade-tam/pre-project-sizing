@@ -45,12 +45,12 @@ public class JwtService {
         Instant now = Instant.now();
 
         JwtClaimsSet claims = JwtClaimsSet.builder()
-                .subject(user.getUsername())
+                .subject(user.getId().toString())
                 .issuedAt(now)
                 .expiresAt(now.plusSeconds(expirationSeconds))
                 .claim("type", type)
                 .claim("email", user.getEmail())
-                .claim("userId", user.getId())
+                .claim("username", user.getUsername())
                 .build();
 
         return jwtEncoder.encode(

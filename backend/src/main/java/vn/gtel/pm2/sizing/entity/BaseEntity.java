@@ -1,17 +1,22 @@
 package vn.gtel.pm2.sizing.entity;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 import java.util.UUID;
 
 @MappedSuperclass
 @Getter
+@EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity {
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -25,11 +30,11 @@ public abstract class BaseEntity {
     @Column(name = "deleted_at")
     private Instant deletedAt;
 
-    @Setter
+    @CreatedBy
     @Column(name = "created_by")
     private UUID createdBy;
 
-    @Setter
+    @LastModifiedBy
     @Column(name = "updated_by")
     private UUID updatedBy;
 

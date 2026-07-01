@@ -10,6 +10,8 @@ import vn.gtel.pm2.sizing.exception.ResourceNotFoundException;
 import vn.gtel.pm2.sizing.repository.UserRepository;
 import vn.gtel.pm2.sizing.service.UserService;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -17,12 +19,21 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
+    public UUID getCurrentUserId() {
+        Jwt principal = (Jwt) SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        return UUID.fromString(principal.getSubject());
+    }
+
+    @Override
     public User getCurrentUser() {
         Jwt principal = (Jwt) SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getPrincipal();
 
-        return userRepository.findByUsername(principal.getSubject())
+        return userRepository.findById(UUID.fromString(principal.getSubject()))
                 .orElseThrow(() ->
                         new ResourceNotFoundException(ResponseCode.USER_NOT_FOUND));
     }

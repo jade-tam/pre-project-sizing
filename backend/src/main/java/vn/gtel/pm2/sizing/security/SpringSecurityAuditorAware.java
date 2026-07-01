@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -25,9 +26,9 @@ public class SpringSecurityAuditorAware implements AuditorAware<UUID> {
             return Optional.empty();
         }
 
-        CustomUserDetails userDetails =
-                (CustomUserDetails) authentication.getPrincipal();
+        Jwt principal =
+                (Jwt) authentication.getPrincipal();
 
-        return Optional.of(userDetails.getUser().getId());
+        return Optional.of(UUID.fromString(principal.getSubject()));
     }
 }
