@@ -23,21 +23,21 @@ sequenceDiagram
     ProjectService-->>User: Show the saved project & calculated result
 ```
 
-## 2. Admin updates the catalog
+## 2. Catalog use during calculation
 
 ```mermaid
 sequenceDiagram
-    actor Admin
+    actor User
     participant AuthService
     participant ProjectService
     participant Database
 
-    Admin->>AuthService: Sign in
-    AuthService-->>Admin: Access granted
-    Admin->>ProjectService: CRUD catalog component details
-    ProjectService->>Database: Save catalog changes
-    Database-->>ProjectService: Update complete
-    ProjectService-->>Admin: Show updated catalog
+    User->>AuthService: Sign in
+    AuthService-->>User: Access granted
+    User->>ProjectService: Open a project
+    ProjectService->>Database: Read project data and catalog values
+    Database-->>ProjectService: Return stored data
+    ProjectService-->>User: Show the project with catalog-based results
 ```
 
 ## Notes
@@ -45,4 +45,4 @@ sequenceDiagram
 - Calculate happens on demand and does not create stored history.
 - Save stores the current project state.
 - The selected component set is locked when the project is created.
-- Admin catalog changes affect future calculations only.
+- Catalog changes affect future calculations only.

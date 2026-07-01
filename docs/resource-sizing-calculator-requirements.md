@@ -4,35 +4,20 @@
 
 Build a web application that helps users estimate infrastructure resources for a project. The app takes workload assumptions, calculates derived load metrics, and converts those metrics into machine counts for selected infrastructure components.
 
-The product has two roles:
-- **Admin**: manages users and the sizing catalog.
-- **Normal user**: creates private projects and calculates sizing results.
+Any signed-in user can create private projects and calculate sizing results.
 
 ## 2. Product goals
 
 - Let a user manage multiple private projects.
 - Let a user choose which infrastructure components belong to a project.
 - Keep each project simple with one current saved state.
-- Let admins maintain component capacities, HA minimums, and machine labels.
+- Keep the sizing catalog global with component capacities, HA minimums, and machine labels.
 - Recalculate results from the saved assumptions when the user requests them.
 - Keep project data private to the project owner.
 
-## 3. Roles and permissions
+## 3. User access
 
-### 3.1 Admin
-
-Admins can:
-- create and manage user accounts
-- assign roles
-- manage the global component catalog
-- edit component label, per-machine capacity, capacity unit, and HA minimum
-
-Admins cannot edit a normal user's private project content in v1.
-
-### 3.2 Normal user
-
-Normal users can:
-- sign up through self-registration
+A signed-in user can:
 - create multiple private projects
 - rename projects
 - choose which components a project uses when creating the project
@@ -43,7 +28,7 @@ Normal users can:
 ## 4. Authentication
 
 - Authentication uses **JWT**.
-- Authorization is role-based.
+- Authorization is ownership-based.
 - The frontend and backend must enforce access controls so a user can only access their own projects.
 
 ## 5. Core product model
@@ -114,7 +99,7 @@ The saved assumptions become the project's current stored state.
 
 ## 7. Sizing catalog
 
-The sizing catalog is global and admin-managed.
+The sizing catalog is global.
 
 Catalog entries include:
 - component name
@@ -222,7 +207,7 @@ When a user opens a project, the page shows:
 - mixed node sizing per component
 - editable formulas
 - soft delete / archive
-- admin viewing other users' private projects
+- viewing other users' private projects
 
 ## 11. Success criteria
 
@@ -230,5 +215,5 @@ The product is successful when:
 - a user can create a private project with a chosen component set
 - the user can calculate results without saving a history record
 - the user can save the current state and later recalculate it
-- admin catalog edits affect future calculations only
+- catalog edits affect future calculations only
 - the UI only shows fields and results for selected components

@@ -1,11 +1,11 @@
-    actor Admin
+    actor User
     participant AuthService
     participant ProjectService
     participant Database
 
-    Admin->>AuthService: Sign in
-    AuthService-->>Admin: Access granted
-    Admin->>ProjectService: Edit catalog component details
-    ProjectService->>Database: Save catalog changes
-    Database-->>ProjectService: Update complete
-    ProjectService-->>Admin: Show updated catalog
+    User->>AuthService: Sign in
+    AuthService-->>User: Access granted
+    User->>ProjectService: Open a project
+    ProjectService->>Database: Read project data and catalog values
+    Database-->>ProjectService: Return stored data
+    ProjectService-->>User: Show the project with catalog-based results

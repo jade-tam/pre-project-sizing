@@ -4,7 +4,7 @@ This document is the single source of truth for the database schema.
 
 ## Design principles
 
-- Use one global admin-managed catalog.
+- Use one global catalog.
 - Keep projects private to one owner.
 - Keep only the current saved project state in the database.
 - Persist saved assumptions, not calculation history.
@@ -25,7 +25,7 @@ This document is the single source of truth for the database schema.
 
 ### 1) Users
 
-Stores application accounts and roles.
+Stores application accounts.
 
 | Column | Type | Notes |
 | --- | --- | --- |
@@ -68,7 +68,7 @@ Stores the private project record owned by one user.
 
 ### 3) CatalogComponents
 
-Stores the admin-managed global sizing catalog.
+Stores the global sizing catalog.
 
 | Column | Type | Notes |
 | --- | --- | --- |
@@ -89,7 +89,7 @@ Stores the admin-managed global sizing catalog.
 #### Notes
 
 - This table combines the tech feature and the machine spec.
-- Admin changes apply only to future calculations and future saves.
+- Catalog changes apply only to future calculations and future saves.
 - Existing saved project assumptions must not change when this table changes.
 
 ---
@@ -173,10 +173,10 @@ Then it returns a calculation response containing:
 
 - Projects are private to their owner.
 - Component selection happens at project creation and does not change afterward.
-- The working draft is local-only until the user saves.
+- The working draft is local-only until the project owner saves.
 - Calculate does not persist a calculation record.
 - Save updates the current project assumptions row.
-- Admin catalog edits affect only future calculations and saves.
+- Catalog edits affect only future calculations and saves.
 - There is no version history in the database for v1.
 - There is no restore flow, no duplicate-from-version flow, and no soft delete in v1.
 
