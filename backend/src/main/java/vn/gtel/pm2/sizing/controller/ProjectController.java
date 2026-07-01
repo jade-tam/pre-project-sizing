@@ -25,19 +25,19 @@ public class ProjectController {
     private final MessageService messageService;
 
     @GetMapping
-    public ApiResponse<PaginationResponse<ProjectResponse>> getProjects(@Valid @ModelAttribute ProjectQuery query) {
+    public ApiResponse<PaginationResponse<ProjectResponse>> getOwnedProjects(@Valid @ModelAttribute ProjectQuery query) {
         return ApiResponse.success(
                 HttpStatus.OK,
                 ResponseCode.SUCCESS.name(),
                 messageService.get(ResponseCode.SUCCESS.getMessageKey()),
-                projectService.getAllProjects(query)
+                projectService.getOwnedProjects(query)
         );
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<ProjectResponse> getProject(@PathVariable Long id) {
+    public ApiResponse<ProjectResponse> getOwnedProject(@PathVariable Long id) {
         return ApiResponse.success(HttpStatus.OK, ResponseCode.SUCCESS.name(),
-                messageService.get(ResponseCode.SUCCESS.getMessageKey()), projectService.getProject(id));
+                messageService.get(ResponseCode.SUCCESS.getMessageKey()), projectService.getOwnedProject(id));
     }
 
     @PostMapping
@@ -65,7 +65,7 @@ public class ProjectController {
                 messageService.get(ResponseCode.SUCCESS.getMessageKey()), projectService.updateProjectAssumptions(id, request));
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ApiResponse<Void> deleteProject(@PathVariable Long id) {
         return ApiResponse.success(HttpStatus.NO_CONTENT, ResponseCode.NO_CONTENT.name(),

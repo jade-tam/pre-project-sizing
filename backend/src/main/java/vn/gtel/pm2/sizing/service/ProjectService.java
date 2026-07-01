@@ -9,9 +9,9 @@ import vn.gtel.pm2.sizing.dto.request.UpdateProjectInfoRequest;
 import vn.gtel.pm2.sizing.dto.response.ProjectResponse;
 
 public interface ProjectService {
-    PaginationResponse<ProjectResponse> getAllProjects(ProjectQuery query);
+    PaginationResponse<ProjectResponse> getOwnedProjects(ProjectQuery query);
 
-    ProjectResponse getProject(Long id);
+    ProjectResponse getOwnedProject(Long id);
 
     ProjectResponse createProject(CreateProjectRequest request);
 

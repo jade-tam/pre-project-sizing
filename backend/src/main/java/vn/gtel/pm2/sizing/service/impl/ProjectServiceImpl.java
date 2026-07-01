@@ -31,6 +31,7 @@ import vn.gtel.pm2.sizing.util.PageableUtils;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -44,8 +45,14 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     @Transactional(readOnly = true)
-    public PaginationResponse<ProjectResponse> getAllProjects(ProjectQuery query) {
-        Specification<Project> specification = ProjectSpecification.from(query);
+    public PaginationResponse<ProjectResponse> getOwnedProjects(ProjectQuery query) {
+        UUID userId = userService.getCurrentUserId();
+
+        Specification<Project> specification = Specification
+                .where(ProjectSpecification.filters(query))
+                .and(ProjectSpecification.ownedBy(userId))
+                .and(ProjectSpecification.notDeleted());
+
         Pageable pageable = PageableUtils.from(query);
 
         Page<Project> projectPage = projectRepository.findAll(specification, pageable);
@@ -56,10 +63,12 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     @Transactional(readOnly = true)
-    public ProjectResponse getProject(Long id) {
-        Project foundProject = projectRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseCode.PROJECT_NOT_FOUND));
+    public ProjectResponse getOwnedProject(Long id) {
+        UUID currentUserId = userService.getCurrentUserId();
 
-        return projectMapper.toResponse(foundProject);
+        Project project = projectRepository.findByIdAndOwnerIdAndDeletedFalse(id, currentUserId).orElseThrow(() -> new ResourceNotFoundException(ResponseCode.PROJECT_NOT_FOUND));
+
+        return projectMapper.toResponse(project);
     }
 
     @Override
@@ -100,7 +109,9 @@ public class ProjectServiceImpl implements ProjectService {
     @Transactional
     public ProjectResponse updateProjectInfo(Long id, UpdateProjectInfoRequest request) {
 
-        Project project = projectRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseCode.PROJECT_NOT_FOUND));
+        UUID currentUserId = userService.getCurrentUserId();
+
+        Project project = projectRepository.findByIdAndOwnerIdAndDeletedFalse(id, currentUserId).orElseThrow(() -> new ResourceNotFoundException(ResponseCode.PROJECT_NOT_FOUND));
         projectMapper.updateProjectInfo(request, project);
         projectRepository.save(project);
 
@@ -110,10 +121,12 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     @Transactional
     public ProjectResponse updateProjectComponentSelections(Long id, UpdateProjectComponentSelectionsRequest request) {
-        Project project = projectRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseCode.PROJECT_NOT_FOUND));
 
-        // TODO: Need refinement, this business code is not complete
-        List<CatalogComponent> catalogComponents = catalogComponentRepository.findAllById(request.getSelectedCatalogComponentIds());
+        UUID currentUserId = userService.getCurrentUserId();
+
+        Project project = projectRepository.findByIdAndOwnerIdAndDeletedFalse(id, currentUserId).orElseThrow(() -> new ResourceNotFoundException(ResponseCode.PROJECT_NOT_FOUND));
+
+        List<CatalogComponent> catalogComponents = catalogComponentRepository.findAllByIdInAndIsActiveTrue(request.getSelectedCatalogComponentIds());
         project.setComponentList(catalogComponents);
         projectRepository.save(project);
 
@@ -123,8 +136,10 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     @Transactional
     public ProjectResponse updateProjectAssumptions(Long id, UpdateProjectAssumptionRequest request) {
-        Project project = projectRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseCode.PROJECT_NOT_FOUND));
 
+        UUID currentUserId = userService.getCurrentUserId();
+
+        Project project = projectRepository.findByIdAndOwnerIdAndDeletedFalse(id, currentUserId).orElseThrow(() -> new ResourceNotFoundException(ResponseCode.PROJECT_NOT_FOUND));
         projectAssumptionMapper.updateEntity(request, project.getProjectAssumption());
         projectRepository.save(project);
 
@@ -135,11 +150,11 @@ public class ProjectServiceImpl implements ProjectService {
     @Transactional
     public Void deleteProject(Long id) {
 
-        User currentUser = userService.getCurrentUser();
+        UUID currentUserId = userService.getCurrentUserId();
 
-        Project project = projectRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseCode.PROJECT_NOT_FOUND));
+        Project project = projectRepository.findByIdAndOwnerIdAndDeletedFalse(id, currentUserId).orElseThrow(() -> new ResourceNotFoundException(ResponseCode.PROJECT_NOT_FOUND));
         project.setDeleted(true);
-        project.setDeletedBy(currentUser.getId());
+        project.setDeletedBy(currentUserId);
         project.setDeletedAt(Instant.now());
 
         return null;

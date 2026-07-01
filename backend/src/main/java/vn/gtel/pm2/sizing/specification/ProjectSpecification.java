@@ -1,54 +1,75 @@
 package vn.gtel.pm2.sizing.specification;
 
-import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Join;
-import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 import vn.gtel.pm2.sizing.dto.query.ProjectQuery;
-import vn.gtel.pm2.sizing.entity.CatalogComponent;
-import vn.gtel.pm2.sizing.entity.Project;
+import vn.gtel.pm2.sizing.entity.*;
 
 import java.util.List;
+import java.util.UUID;
 
 public final class ProjectSpecification {
-    public static Specification<Project> from(ProjectQuery query) {
-        return Specification.where(search(query.getSearch())).and(isDeleted(query.isDeleted())).and(hasAllCatalogComponents(query.getCatalogComponentIds()));
+
+    private ProjectSpecification() {
+    }
+
+    // ------------------------
+    // Business Constraints
+    // ------------------------
+
+    public static Specification<Project> ownedBy(UUID ownerUserId) {
+        return (root, query, cb) ->
+                cb.equal(root.get(Project_.owner).get(User_.id), ownerUserId);
+    }
+
+    public static Specification<Project> notDeleted() {
+        return (root, query, cb) ->
+                cb.isFalse(root.get(Project_.deleted));
+    }
+
+    public static Specification<Project> deleted() {
+        return (root, query, cb) ->
+                cb.isTrue(root.get(Project_.deleted));
+    }
+
+    // ------------------------
+    // Search Filters for query
+    // ------------------------
+
+    public static Specification<Project> filters(ProjectQuery query) {
+        return Specification.where(search(query.getSearch()))
+                .and(hasAllCatalogComponents(query.getCatalogComponentIds()));
     }
 
     private static Specification<Project> search(String keyword) {
-        return ((root, query, criteriaBuilder) -> {
-            if (keyword == null || keyword.isBlank()) return null;
+        return (root, query, cb) -> {
+            if (keyword == null || keyword.isBlank()) {
+                return null;
+            }
 
             String pattern = "%" + keyword.trim().toLowerCase() + "%";
 
-            return criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), pattern);
-        });
+            return cb.like(cb.lower(root.get(Project_.name)), pattern);
+        };
     }
 
-    private static Specification<Project> isDeleted(boolean deleted) {
-        return ((root, query, criteriaBuilder) -> {
-            return criteriaBuilder.equal(root.get("deleted"), deleted);
-        });
-    }
-
+    // A project can have extra components, but it must contain every selected one.
     private static Specification<Project> hasAllCatalogComponents(List<Long> ids) {
         return (root, query, cb) -> {
 
-            if (ids == null || ids.isEmpty()) return null;
+            if (ids == null || ids.isEmpty()) {
+                return null;
+            }
+
+            Join<Project, CatalogComponent> components = root.join(Project_.componentList);
 
             query.distinct(true);
+            query.groupBy(root.get(Project_.id));
 
-            Join<Project, CatalogComponent> join = root.join("componentList");
-
-            // filter only selected components
-            Predicate inSelected = join.get("id").in(ids);
-
-            query.groupBy(root.get("id"));
-
-            // count matched components per project
-            Expression<Long> matchedCount = cb.countDistinct(join.get("id"));
-
-            return cb.equal(matchedCount, (long) ids.size());
+            return cb.and(
+                    components.get(CatalogComponent_.id).in(ids),
+                    cb.equal(cb.countDistinct(components.get(CatalogComponent_.id)), (long) ids.size())
+            );
         };
     }
 }

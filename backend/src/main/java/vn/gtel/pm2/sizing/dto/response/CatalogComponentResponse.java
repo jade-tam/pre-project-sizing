@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
+import java.util.UUID;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,4 +22,8 @@ public class CatalogComponentResponse {
     private Integer haMinimum;
     private String referenceUrl;
     private boolean isActive;
+    private Instant updatedAt;
+    private UUID updatedBy;
+    private Instant createdAt;
+    private UUID createdBy;
 }
