@@ -24,6 +24,7 @@ import vn.gtel.pm2.sizing.mapper.ProjectMapper;
 import vn.gtel.pm2.sizing.repository.CatalogComponentRepository;
 import vn.gtel.pm2.sizing.repository.ProjectRepository;
 import vn.gtel.pm2.sizing.service.ProjectService;
+import vn.gtel.pm2.sizing.service.SizingService;
 import vn.gtel.pm2.sizing.service.UserService;
 import vn.gtel.pm2.sizing.specification.ProjectSpecification;
 import vn.gtel.pm2.sizing.util.PageableUtils;
@@ -42,6 +43,7 @@ public class ProjectServiceImpl implements ProjectService {
     private final ProjectMapper projectMapper;
     private final ProjectAssumptionMapper projectAssumptionMapper;
     private final CatalogComponentRepository catalogComponentRepository;
+    private final SizingService sizingService;
 
     @Override
     @Transactional(readOnly = true)
@@ -56,7 +58,7 @@ public class ProjectServiceImpl implements ProjectService {
         Pageable pageable = PageableUtils.from(query);
 
         Page<Project> projectPage = projectRepository.findAll(specification, pageable);
-        Page<ProjectResponse> projectResponsePage = projectPage.map(projectMapper::toResponse);
+        Page<ProjectResponse> projectResponsePage = projectPage.map(this::buildProjectResponse);
 
         return PaginationResponse.from(projectResponsePage);
     }
@@ -68,7 +70,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         Project project = projectRepository.findByIdAndOwnerIdAndDeletedFalse(id, currentUserId).orElseThrow(() -> new ResourceNotFoundException(ResponseCode.PROJECT_NOT_FOUND));
 
-        return projectMapper.toResponse(project);
+        return buildProjectResponse(project);
     }
 
     @Override
@@ -102,7 +104,7 @@ public class ProjectServiceImpl implements ProjectService {
         project.setProjectAssumption(projectAssumption);
         projectRepository.save(project);
 
-        return projectMapper.toResponse(project);
+        return buildProjectResponse(project);
     }
 
     @Override
@@ -115,7 +117,7 @@ public class ProjectServiceImpl implements ProjectService {
         projectMapper.updateProjectInfo(request, project);
         projectRepository.save(project);
 
-        return projectMapper.toResponse(project);
+        return buildProjectResponse(project);
     }
 
     @Override
@@ -130,7 +132,7 @@ public class ProjectServiceImpl implements ProjectService {
         project.setComponentList(catalogComponents);
         projectRepository.save(project);
 
-        return projectMapper.toResponse(project);
+        return buildProjectResponse(project);
     }
 
     @Override
@@ -143,7 +145,7 @@ public class ProjectServiceImpl implements ProjectService {
         projectAssumptionMapper.updateEntity(request, project.getProjectAssumption());
         projectRepository.save(project);
 
-        return projectMapper.toResponse(project);
+        return buildProjectResponse(project);
     }
 
     @Override
@@ -158,5 +160,14 @@ public class ProjectServiceImpl implements ProjectService {
         project.setDeletedAt(Instant.now());
 
         return null;
+    }
+
+    // Helper method for reusing code
+    private ProjectResponse buildProjectResponse(Project project) {
+        ProjectResponse response = projectMapper.toResponse(project);
+        response.setSizingResults(sizingService.calculateSizingResults(project));
+        response.setTotalMachinesResult(sizingService.calculateTotalMachines(response.getSizingResults()));
+
+        return response;
     }
 }

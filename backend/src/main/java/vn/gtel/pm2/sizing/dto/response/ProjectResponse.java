@@ -18,6 +18,8 @@ public class ProjectResponse {
     private String description;
     private List<CatalogComponentResponse> selectedCatalogComponents;
     private ProjectAssumptionResponse projectAssumption;
+    private List<ComponentSizingResultResponse> sizingResults;
+    private Integer totalMachinesResult;
     private Instant createdAt;
     private Instant updatedAt;
     private UUID createdBy;
