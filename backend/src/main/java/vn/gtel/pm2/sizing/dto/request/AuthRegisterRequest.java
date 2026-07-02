@@ -27,6 +27,7 @@ public class AuthRegisterRequest {
     @Size(min = 3, max = 200)
     private String fullName;
 
+    @NotBlank
     @Email
     @Size(max = 120)
     private String email;

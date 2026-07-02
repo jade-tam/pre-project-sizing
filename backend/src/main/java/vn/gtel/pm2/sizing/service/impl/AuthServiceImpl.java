@@ -20,6 +20,7 @@ import vn.gtel.pm2.sizing.exception.AuthenticationException;
 import vn.gtel.pm2.sizing.exception.BusinessException;
 import vn.gtel.pm2.sizing.exception.ResourceNotFoundException;
 import vn.gtel.pm2.sizing.repository.UserRepository;
+import vn.gtel.pm2.sizing.security.CustomUserDetails;
 import vn.gtel.pm2.sizing.security.JwtService;
 import vn.gtel.pm2.sizing.service.AuthService;
 
@@ -69,13 +70,14 @@ public class AuthServiceImpl implements AuthService {
     public AuthResponse login(AuthLoginRequest request) {
 
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                request.getUsername(),
+                request.getEmail(),
                 request.getPassword()
         ));
 
-        String username = authentication.getName();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        String email = userDetails.getUsername(); // This method is configured to return email
 
-        User user = userRepository.findByUsername(username).orElseThrow(); // Exceptions handled by authenticationManager authenticate
+        User user = userRepository.findByEmail(email).orElseThrow(); // Exceptions handled by authenticationManager authenticate
 
         return new AuthResponse(
                 jwtService.generateAccessToken(user),
