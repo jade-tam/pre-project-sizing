@@ -37,11 +37,30 @@ public class User extends BaseEntity {
     @Column(name = "active")
     private boolean active = false;
 
+    @Setter
+    private String avatarUrl;
+
+    @Setter
+    @Column(length = 100)
+    private String displayName;
+
+    @Setter
+    @Column(length = 50)
+    private String pronouns;
+
+    @Setter
+    @Column(length = 500)
+    private String bio;
+
     public User(String username, String passwordHash, String fullName, String email, boolean active) {
         this.username = username;
         this.passwordHash = passwordHash;
         this.fullName = fullName;
         this.email = email;
         this.active = active;
+        this.avatarUrl = null;
+        this.displayName = fullName;
+        this.pronouns = "";
+        this.bio = "";
     }
 }

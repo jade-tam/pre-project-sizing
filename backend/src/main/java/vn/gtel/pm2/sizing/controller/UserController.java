@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vn.gtel.pm2.sizing.dto.common.ApiResponse;
-import vn.gtel.pm2.sizing.entity.User;
+import vn.gtel.pm2.sizing.dto.response.UserResponse;
 import vn.gtel.pm2.sizing.enums.ResponseCode;
 import vn.gtel.pm2.sizing.i18n.MessageService;
 import vn.gtel.pm2.sizing.service.UserService;
@@ -20,12 +20,12 @@ public class UserController {
     private final MessageService messageService;
 
     @GetMapping("/me")
-    public ApiResponse<User> getCurrentUser() {
+    public ApiResponse<UserResponse> getCurrentUser() {
         return ApiResponse.success(
                 HttpStatus.OK,
                 ResponseCode.SUCCESS.name(),
                 messageService.get(ResponseCode.SUCCESS.getMessageKey()),
-                userService.getCurrentUser()
+                userService.getCurrentUserResponse()
         );
     }
 }
