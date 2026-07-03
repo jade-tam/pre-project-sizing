@@ -16,9 +16,9 @@ Backend mặc định chạy port `8088`, context path `/pre-project-sizing/api`
 Cấu hình database/SSO nên truyền qua biến môi trường:
 
 ```bash
-export DB_URL=jdbc:oracle:thin:@localhost:1521/XEPDB1
-export DB_USERNAME=pre_project_sizing
-export DB_PASSWORD=change-me
+export DB_URL=jdbc:postgreql:@localhost:5432/sizing-project
+export DB_USERNAME=username
+export DB_PASSWORD=password
 export OAUTH_ISSUER_URI=http://localhost:4444
 ```
 

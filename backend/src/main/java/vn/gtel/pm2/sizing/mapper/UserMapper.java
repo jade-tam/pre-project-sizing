@@ -1,9 +1,7 @@
 package vn.gtel.pm2.sizing.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingConstants;
-import org.mapstruct.MappingTarget;
-import vn.gtel.pm2.sizing.dto.request.UpdateUserRequest;
+import org.mapstruct.*;
+import vn.gtel.pm2.sizing.dto.request.PatchUserRequest;
 import vn.gtel.pm2.sizing.dto.response.UserResponse;
 import vn.gtel.pm2.sizing.entity.User;
 
@@ -17,6 +15,10 @@ public interface UserMapper {
 
     List<UserResponse> toResponseList(List<User> entities);
 
-    void updateEntity(UpdateUserRequest request,
-                      @MappingTarget User entity);
+//    void updateEntity(UpdateUserRequest request,
+//                      @MappingTarget User entity);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void patchEntity(PatchUserRequest request,
+                     @MappingTarget User entity);
 }

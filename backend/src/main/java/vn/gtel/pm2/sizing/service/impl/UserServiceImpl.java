@@ -4,9 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import vn.gtel.pm2.sizing.dto.request.PatchUserRequest;
 import vn.gtel.pm2.sizing.dto.response.UserResponse;
 import vn.gtel.pm2.sizing.entity.User;
 import vn.gtel.pm2.sizing.enums.ResponseCode;
+import vn.gtel.pm2.sizing.exception.BusinessException;
 import vn.gtel.pm2.sizing.exception.ResourceNotFoundException;
 import vn.gtel.pm2.sizing.mapper.UserMapper;
 import vn.gtel.pm2.sizing.repository.UserRepository;
@@ -44,6 +47,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse getCurrentUserResponse() {
         User user = getCurrentUser();
+
+        return userMapper.toResponse(user);
+    }
+
+    @Override
+    @Transactional
+    public UserResponse patchCurrentUser(PatchUserRequest request) {
+        User user = getCurrentUser();
+
+        if (!request.getUsername().equals(user.getUsername()) && userRepository.existsByUsername(request.getUsername())) {
+            throw new BusinessException(ResponseCode.USERNAME_ALREADY_EXIST);
+        }
+
+        userMapper.patchEntity(request, user);
+        userRepository.save(user);
 
         return userMapper.toResponse(user);
     }
