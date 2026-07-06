@@ -15,5 +15,6 @@ public class ComponentSizingResultResponse {
     private String catalogComponentName;
     private String catalogComponentCapacityUnit;
     private BigDecimal requiredCapacity;
+    private Integer requiredMachines;
     private Integer totalMachines;
 }

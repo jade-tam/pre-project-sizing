@@ -138,6 +138,7 @@ public class SizingServiceImpl implements SizingService {
                 component.getName(),
                 component.getCapacityUnit(),
                 requiredCapacity.setScale(2, RoundingMode.HALF_UP),
+                requiredMachines,
                 totalMachines
         );
     }

@@ -1,7 +1,7 @@
 package vn.gtel.pm2.sizing.dto.request;
 
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,43 +9,43 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdateProjectAssumptionRequest {
 
-    @Positive
+    @PositiveOrZero
     @NotNull
     private Integer concurrentUsers;
 
-    @Positive
+    @PositiveOrZero
     @NotNull
     private Float headroom;
 
-    @Positive
+    @PositiveOrZero
     @NotNull
     private Float requestsPerUserPerSecond;
 
-    @Positive
+    @PositiveOrZero
     @NotNull
     private Float apiCallsPerRequest;
 
-    @Positive
+    @PositiveOrZero
     @NotNull
     private Float dbRatioPerRequest;
 
-    @Positive
+    @PositiveOrZero
     @NotNull
     private Float searchRatioPerRequest;
 
-    @Positive
+    @PositiveOrZero
     @NotNull
     private Float cacheRatioPerRequest;
 
-    @Positive
+    @PositiveOrZero
     @NotNull
     private Float kafkaRatioPerRequest;
 
-    @Positive
+    @PositiveOrZero
     @NotNull
     private Integer logBytesPerRequest;
 
-    @Positive
+    @PositiveOrZero
     @NotNull
     private Float authRatio;
 }
