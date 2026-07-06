@@ -61,15 +61,19 @@ public final class ProjectSpecification {
                 return null;
             }
 
-            Join<Project, CatalogComponent> components = root.join(Project_.componentList);
+            Join<Project, CatalogComponent> components =
+                    root.join(Project_.componentList);
 
-            query.distinct(true);
             query.groupBy(root.get(Project_.id));
 
-            return cb.and(
-                    components.get(CatalogComponent_.id).in(ids),
-                    cb.equal(cb.countDistinct(components.get(CatalogComponent_.id)), (long) ids.size())
+            query.having(
+                    cb.equal(
+                            cb.countDistinct(components.get(CatalogComponent_.id)),
+                            (long) ids.size()
+                    )
             );
+
+            return components.get(CatalogComponent_.id).in(ids);
         };
     }
 }
