@@ -1,6 +1,7 @@
 package vn.gtel.pm2.sizing.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -34,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ProjectServiceImpl implements ProjectService {
@@ -77,6 +79,8 @@ public class ProjectServiceImpl implements ProjectService {
     @Transactional
     public ProjectResponse createProject(CreateProjectRequest request) {
 
+        log.info("Creating project name={}", request.getName());
+
         User currentUser = userService.getCurrentUser();
 
         Project project = new Project(
@@ -104,6 +108,8 @@ public class ProjectServiceImpl implements ProjectService {
         project.setProjectAssumption(projectAssumption);
         projectRepository.save(project);
 
+        log.info("Created project name={} - id={}", project.getName(), project.getId());
+
         return buildProjectResponse(project);
     }
 
@@ -111,11 +117,15 @@ public class ProjectServiceImpl implements ProjectService {
     @Transactional
     public ProjectResponse updateProjectInfo(Long id, UpdateProjectInfoRequest request) {
 
+        log.info("Updating info for project id={}", id);
+
         UUID currentUserId = userService.getCurrentUserId();
 
         Project project = projectRepository.findByIdAndOwnerIdAndDeletedFalse(id, currentUserId).orElseThrow(() -> new ResourceNotFoundException(ResponseCode.PROJECT_NOT_FOUND));
         projectMapper.updateProjectInfo(request, project);
         projectRepository.save(project);
+
+        log.info("Updated info for project id={}", id);
 
         return buildProjectResponse(project);
     }
@@ -123,6 +133,8 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     @Transactional
     public ProjectResponse updateProjectComponentSelections(Long id, UpdateProjectComponentSelectionsRequest request) {
+
+        log.info("Updating component selections for project id={}", id);
 
         UUID currentUserId = userService.getCurrentUserId();
 
@@ -132,6 +144,8 @@ public class ProjectServiceImpl implements ProjectService {
         project.setComponentList(catalogComponents);
         projectRepository.save(project);
 
+        log.info("Updated component selections for project id={}", id);
+
         return buildProjectResponse(project);
     }
 
@@ -139,11 +153,15 @@ public class ProjectServiceImpl implements ProjectService {
     @Transactional
     public ProjectResponse updateProjectAssumptions(Long id, UpdateProjectAssumptionRequest request) {
 
+        log.info("Updating assumptions for project id={}", id);
+
         UUID currentUserId = userService.getCurrentUserId();
 
         Project project = projectRepository.findByIdAndOwnerIdAndDeletedFalse(id, currentUserId).orElseThrow(() -> new ResourceNotFoundException(ResponseCode.PROJECT_NOT_FOUND));
         projectAssumptionMapper.updateEntity(request, project.getProjectAssumption());
         projectRepository.save(project);
+
+        log.info("Updated assumption for project id={}", id);
 
         return buildProjectResponse(project);
     }
@@ -151,6 +169,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     @Transactional
     public Void deleteProject(Long id) {
+        log.info("Deleting project id={}", id);
 
         UUID currentUserId = userService.getCurrentUserId();
 
@@ -158,6 +177,8 @@ public class ProjectServiceImpl implements ProjectService {
         project.setDeleted(true);
         project.setDeletedBy(currentUserId);
         project.setDeletedAt(Instant.now());
+
+        log.info("Deleted project id={}", id);
 
         return null;
     }

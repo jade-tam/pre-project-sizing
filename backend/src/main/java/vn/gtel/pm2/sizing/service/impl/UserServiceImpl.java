@@ -1,6 +1,7 @@
 package vn.gtel.pm2.sizing.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import vn.gtel.pm2.sizing.service.UserService;
 
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -54,6 +56,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserResponse patchCurrentUser(PatchUserRequest request) {
+        log.info("Patching user username={}", request.getUsername());
+
         User user = getCurrentUser();
 
         if (!request.getUsername().equals(user.getUsername()) && userRepository.existsByUsername(request.getUsername())) {
@@ -62,6 +66,8 @@ public class UserServiceImpl implements UserService {
 
         userMapper.patchEntity(request, user);
         userRepository.save(user);
+
+        log.info("Patched user username={}", request.getUsername());
 
         return userMapper.toResponse(user);
     }

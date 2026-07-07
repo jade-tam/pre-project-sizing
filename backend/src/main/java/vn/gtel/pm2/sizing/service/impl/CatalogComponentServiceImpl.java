@@ -43,9 +43,13 @@ public class CatalogComponentServiceImpl implements CatalogComponentService {
     @Transactional
     public CatalogComponentResponse updateCatalogComponent(Long id, UpdateCatalogComponentRequest request) {
 
+        log.info("Updating catalog component with id {}", id);
+
         CatalogComponent catalogComponent = catalogComponentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseCode.CATALOG_COMPONENT_NOT_FOUND));
         catalogComponentMapper.updateEntity(request, catalogComponent);
         catalogComponent = catalogComponentRepository.save(catalogComponent);
+
+        log.info("Updated catalog component with id {}", id);
 
         return catalogComponentMapper.toResponse(catalogComponent);
     }
