@@ -30,7 +30,16 @@ npm install
 npm run dev
 ```
 
-Frontend mặc định chạy qua Vite ở port cấu hình trong `vite.config.ts`. Copy `frontend/.env.example` thành `frontend/.env` và chỉnh lại endpoint/SSO theo môi trường chạy thực tế.
+Copy `frontend/.env.example` thành `frontend/.env` và chỉnh lại endpoint/SSO theo môi trường chạy thực tế.
+
+Thay đổi port frontend qua packpage.json
+
+```json
+"scripts": {
+    "dev": "next dev -p 3000", // for dev
+    "start": "next start -p 3000" // for prod
+},
+```
 
 ## Build
 
