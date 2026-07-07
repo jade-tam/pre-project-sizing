@@ -20,7 +20,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class SizingServiceImpl implements SizingService {
 
-    private static final List<String> SECOND_PASS_COMPONENT_KEYS = List.of("PROMETHEUS", "K8S_MASTER");
+    private static final List<String> SECOND_PASS_COMPONENT_KEYS = List.of("K8S_MASTER");
+    private static final List<String> THIRD_PASS_COMPONENT_KEYS = List.of("PROMETHEUS");
 
     @Override
     public List<ComponentSizingResultResponse> calculateSizingResults(Project project) {
@@ -31,7 +32,7 @@ public class SizingServiceImpl implements SizingService {
 
         // Pass 1: components whose load derives purely from project assumptions
         for (CatalogComponent component : components) {
-            if (SECOND_PASS_COMPONENT_KEYS.contains(component.getComponentKey())) {
+            if (SECOND_PASS_COMPONENT_KEYS.contains(component.getComponentKey()) || THIRD_PASS_COMPONENT_KEYS.contains(component.getComponentKey())) {
                 continue;
             }
             ComponentSizingResultResponse result = calculateResultForComponent(assumption, component, resultsByKey);
@@ -41,6 +42,15 @@ public class SizingServiceImpl implements SizingService {
         // Pass 2: components whose load depends on other components' finalized machine counts
         for (CatalogComponent component : components) {
             if (!SECOND_PASS_COMPONENT_KEYS.contains(component.getComponentKey())) {
+                continue;
+            }
+            ComponentSizingResultResponse result = calculateResultForComponent(assumption, component, resultsByKey);
+            resultsByKey.put(component.getComponentKey(), result);
+        }
+
+        // Pass 3: needed for prometheus calculation
+        for (CatalogComponent component : components) {
+            if (!THIRD_PASS_COMPONENT_KEYS.contains(component.getComponentKey())) {
                 continue;
             }
             ComponentSizingResultResponse result = calculateResultForComponent(assumption, component, resultsByKey);
@@ -249,7 +259,38 @@ public class SizingServiceImpl implements SizingService {
                 .mapToInt(ComponentSizingResultResponse::getTotalMachines)
                 .sum();
 
-        BigDecimal requiredCapacity = BigDecimal.valueOf(totalOtherMachines);
-        return buildResultResponse(component, requiredCapacity);
+        Double capacity = component.getPerMachineCapacity();
+
+        if (capacity <= 1) {
+            throw new IllegalArgumentException(
+                    "Prometheus per machine capacity must be greater than 1"
+            );
+        }
+
+        int requiredMachines = BigDecimal.valueOf(totalOtherMachines)
+                .divide(
+                        BigDecimal.valueOf(capacity - 1),
+                        0,
+                        RoundingMode.UP
+                )
+                .intValue();
+
+        int totalPrometheusMachines = Math.max(
+                requiredMachines,
+                component.getHaMinimum()
+        );
+
+        int totalFleetMachines = totalOtherMachines + totalPrometheusMachines;
+
+        return new ComponentSizingResultResponse(
+                component.getId(),
+                component.getComponentKey(),
+                component.getName(),
+                component.getCapacityUnit(),
+                BigDecimal.valueOf(totalFleetMachines)
+                        .setScale(2, RoundingMode.HALF_UP),
+                requiredMachines,
+                totalPrometheusMachines
+        );
     }
 }
