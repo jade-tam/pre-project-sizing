@@ -48,9 +48,9 @@ cd backend && mvn -DskipTests package
 cd frontend && npm run build
 ```
 
-## Deployment lên ubuntu
+## Deployment backend lên ubuntu
 
-Frontend, backend và postgresql database chạy qua docker compose.
+Backend và postgresql database chạy qua docker compose.
 
 Copy deploy/.env.example thành deploy/.env và chỉnh lại giá trị env cho docker compose.
 
