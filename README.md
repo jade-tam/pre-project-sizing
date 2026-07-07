@@ -32,7 +32,7 @@ npm run dev
 
 Copy `frontend/.env.example` thành `frontend/.env` và chỉnh lại endpoint/SSO theo môi trường chạy thực tế.
 
-Thay đổi port frontend qua packpage.json
+Frontend mặc định chạy qua port `3000`. Thay đổi port frontend qua packpage.json
 
 ```json
 "scripts": {
