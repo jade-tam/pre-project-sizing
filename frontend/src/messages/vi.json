@@ -55,10 +55,12 @@
     "project": {
       "created": "Tạo dự án thành công.",
       "updated": "Cập nhật dự án thành công.",
+      "deleted": "Xóa dự án thành công.",
       "loadFailed": "Không thể tải dự án.",
       "loadListFailed": "Không thể tải danh sách dự án.",
       "saveFailed": "Không thể lưu dự án. Vui lòng thử lại.",
-      "createFailed": "Không thể tạo dự án. Vui lòng thử lại."
+      "createFailed": "Không thể tạo dự án. Vui lòng thử lại.",
+      "deleteFailed": "Không thể xóa dự án. Vui lòng thử lại."
     },
     "auth": {
       "signedIn": "Đăng nhập thành công.",
@@ -823,7 +825,19 @@
       "actions": {
         "selectComponents": "Chọn thành phần",
         "editAssumptions": "Chỉnh sửa giả định",
-        "edit": "Sửa"
+        "edit": "Sửa",
+        "delete": "Xóa dự án"
+      },
+      "deleteDialog": {
+        "title": "Xóa dự án?",
+        "description": "Bạn có chắc chắn muốn xóa \"{name}\"? Hành động này không thể hoàn tác.",
+        "warning": "Dự án này và toàn bộ dữ liệu của nó sẽ bị xóa vĩnh viễn.",
+        "actions": {
+          "cancel": "Hủy",
+          "delete": "Xóa dự án",
+          "deleting": "Đang xóa...",
+          "close": "Đóng hộp thoại"
+        }
       }
     },
     "projectCreate": {

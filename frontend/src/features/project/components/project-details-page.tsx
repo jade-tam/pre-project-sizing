@@ -1,17 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useRouter } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
+import { useState } from "react";
 
+import { EmptyPlaceholder } from "@/components/ui/EmptyPlaceholder";
 import { useCatalogComponentsQuery } from "@/features/catalog-component/queries/use-catalog-components-query";
 import { getProjectErrorTranslationKey } from "@/features/project/errors";
+import { useDeleteProjectMutation } from "@/features/project/mutations/use-delete-project";
 import { useUpdateProjectAssumptionsMutation } from "@/features/project/mutations/use-update-project-assumptions";
 import { useUpdateProjectComponentSelectionsMutation } from "@/features/project/mutations/use-update-project-component-selections";
 import { useOwnedProjectQuery } from "@/features/project/queries/use-owned-project-query";
 import { showErrorToast, showSuccessToast } from "@/lib/toast/toast";
 import { ProjectAssumptionsDialog } from "./project-assumptions-dialog";
 import { ProjectComponentSelectionDialog } from "./project-component-selection-dialog";
-import { EmptyPlaceholder } from "@/components/ui/EmptyPlaceholder";
+import { ProjectDeleteDialog } from "./project-delete-dialog";
 
 function formatDate(value: string) {
   const date = new Date(value);
@@ -36,13 +39,16 @@ function formatNumber(value: number) {
 
 export function ProjectDetailsPage({ id }: { id: string }) {
   const t = useTranslations();
+  const router = useRouter();
   const projectId = Number(id);
   const projectQuery = useOwnedProjectQuery(projectId);
   const catalogComponentsQuery = useCatalogComponentsQuery();
   const updateSelectionMutation = useUpdateProjectComponentSelectionsMutation();
   const updateAssumptionsMutation = useUpdateProjectAssumptionsMutation();
+  const deleteProjectMutation = useDeleteProjectMutation();
   const [selectionOpen, setSelectionOpen] = useState(false);
   const [assumptionsOpen, setAssumptionsOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
   if (projectQuery.isPending) {
     return <div className="skeleton h-64 w-full" />;
@@ -400,7 +406,7 @@ export function ProjectDetailsPage({ id }: { id: string }) {
                     {t("pages.projectDetails.sizingResults.aggregatedTotal")}
                   </td>
                   <td className="text-right tabular-nums">
-                    <span className="badge badge-primary badge-soft rounded-[2px]">
+                    <span className="badge badge-warning rounded-[2px]">
                       {project.totalMachinesResult}{" "}
                       {t("pages.projectDetails.sizingResults.machines")}
                     </span>
@@ -412,6 +418,17 @@ export function ProjectDetailsPage({ id }: { id: string }) {
           </div>
         </div>
       </section>
+
+      <div className="flex justify-end">
+        <button
+          type="button"
+          className="btn btn-error"
+          onClick={() => setDeleteOpen(true)}
+        >
+          <span className="icon-[fluent--delete-20-regular] size-4" />
+          {t("pages.projectDetails.actions.delete")}
+        </button>
+      </div>
 
       <ProjectComponentSelectionDialog
         open={selectionOpen}
@@ -467,6 +484,31 @@ export function ProjectDetailsPage({ id }: { id: string }) {
                 getProjectErrorTranslationKey(
                   errorCode,
                   "toast.project.saveFailed",
+                ),
+              ),
+            );
+          }
+        }}
+      />
+
+      <ProjectDeleteDialog
+        open={deleteOpen}
+        projectName={project.name}
+        isPending={deleteProjectMutation.isPending}
+        onClose={() => setDeleteOpen(false)}
+        onConfirm={async () => {
+          try {
+            await deleteProjectMutation.mutateAsync(projectId);
+            showSuccessToast(t("toast.project.deleted"));
+            router.push("/dashboard/projects");
+          } catch (error) {
+            const errorCode =
+              error instanceof Error ? error.message : undefined;
+            showErrorToast(
+              t(
+                getProjectErrorTranslationKey(
+                  errorCode,
+                  "toast.project.deleteFailed",
                 ),
               ),
             );

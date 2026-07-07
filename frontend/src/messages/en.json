@@ -55,10 +55,12 @@
     "project": {
       "created": "Project created successfully.",
       "updated": "Project updated successfully.",
+      "deleted": "Project deleted successfully.",
       "loadFailed": "Unable to load project.",
       "loadListFailed": "Unable to load projects.",
       "saveFailed": "Unable to save project. Please try again.",
-      "createFailed": "Unable to create project. Please try again."
+      "createFailed": "Unable to create project. Please try again.",
+      "deleteFailed": "Unable to delete project. Please try again."
     },
     "auth": {
       "signedIn": "Signed in successfully.",
@@ -823,7 +825,19 @@
       "actions": {
         "selectComponents": "Select components",
         "editAssumptions": "Edit assumptions",
-        "edit": "Edit"
+        "edit": "Edit",
+        "delete": "Delete project"
+      },
+      "deleteDialog": {
+        "title": "Delete project?",
+        "description": "Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+        "warning": "This project and all its data will be permanently removed.",
+        "actions": {
+          "cancel": "Cancel",
+          "delete": "Delete project",
+          "deleting": "Deleting...",
+          "close": "Close modal"
+        }
       }
     },
     "projectCreate": {
