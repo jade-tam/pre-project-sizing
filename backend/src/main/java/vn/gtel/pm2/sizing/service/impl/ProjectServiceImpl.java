@@ -2,11 +2,14 @@ package vn.gtel.pm2.sizing.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import vn.gtel.pm2.sizing.constant.CacheNames;
 import vn.gtel.pm2.sizing.dto.common.PaginationResponse;
 import vn.gtel.pm2.sizing.dto.query.ProjectQuery;
 import vn.gtel.pm2.sizing.dto.request.CreateProjectRequest;
@@ -67,6 +70,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(CacheNames.PROJECTS)
     public ProjectResponse getOwnedProject(Long id) {
         UUID currentUserId = userService.getCurrentUserId();
 
@@ -115,6 +119,10 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     @Transactional
+    @CacheEvict(
+            value = CacheNames.PROJECTS,
+            key = "#id"
+    )
     public ProjectResponse updateProjectInfo(Long id, UpdateProjectInfoRequest request) {
 
         log.info("Updating info for project id={}", id);
@@ -132,6 +140,10 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     @Transactional
+    @CacheEvict(
+            value = CacheNames.PROJECTS,
+            key = "#id"
+    )
     public ProjectResponse updateProjectComponentSelections(Long id, UpdateProjectComponentSelectionsRequest request) {
 
         log.info("Updating component selections for project id={}", id);
@@ -151,6 +163,10 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     @Transactional
+    @CacheEvict(
+            value = CacheNames.PROJECTS,
+            key = "#id"
+    )
     public ProjectResponse updateProjectAssumptions(Long id, UpdateProjectAssumptionRequest request) {
 
         log.info("Updating assumptions for project id={}", id);
@@ -168,6 +184,10 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     @Transactional
+    @CacheEvict(
+            value = CacheNames.PROJECTS,
+            key = "#id"
+    )
     public Void deleteProject(Long id) {
         log.info("Deleting project id={}", id);
 
