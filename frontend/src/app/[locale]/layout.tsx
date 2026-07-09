@@ -23,6 +23,9 @@ import {
   Space_Mono,
 } from "next/font/google";
 import "@/app/globals.css";
+import { AxiosLocaleProvider } from "@/providers/AxiosLocaleProvider";
+import { QueryProvider } from "@/providers/QueryProvider";
+import ToastProvider from "@/providers/toast-provider";
 
 const customSans = Baloo_Bhai_2({
   variable: "--font-customSans",
@@ -141,7 +144,14 @@ export default async function LocaleLayout({
         />
         <Analytics />
         <NextIntlClientProvider>
-          <ThemeProvider initialTheme={theme}>{children}</ThemeProvider>
+          <ThemeProvider initialTheme={theme}>
+            <AxiosLocaleProvider>
+              <QueryProvider>
+                {children}
+                <ToastProvider />
+              </QueryProvider>
+            </AxiosLocaleProvider>
+          </ThemeProvider>
         </NextIntlClientProvider>
       </body>
     </html>
