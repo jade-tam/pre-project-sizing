@@ -225,28 +225,33 @@ export function ProjectOwnedProjectsPage() {
               (projectsQuery.data?.pageData ?? []).map((project) => (
                 <tr key={project.id}>
                   <td className="align-top">
-                    <div className="flex items-start justify-between gap-4 min-w-[300px] max-w-[500px]">
-                      <div className="min-w-0 space-y-1">
-                        <div className="wrap-break-word text-base font-semibold leading-snug">
-                          {project.name}
-                        </div>
-                        <div className="wrap-break-word text-sm leading-snug text-base-content/70">
-                          {project.description}
-                        </div>
-                        <div className="flex flex-wrap gap-1.5 pt-1">
-                          {project.selectedCatalogComponents.map( 
-                            (component) => (
-                              <span
-                                key={component.id}
-                                className="badge badge-xs badge-primary badge-soft"
-                              >
-                                {component.name}
-                              </span>
-                            ),
-                          )}
+                    <Link
+                      href={`/dashboard/projects/${project.id}`}
+                      className=""
+                    >
+                      <div className="flex items-start justify-between gap-4 min-w-[300px] max-w-[500px]">
+                        <div className="min-w-0 space-y-1">
+                          <div className="wrap-break-word text-base font-semibold leading-snug">
+                            {project.name}
+                          </div>
+                          <div className="wrap-break-word text-sm leading-snug text-base-content/70">
+                            {project.description}
+                          </div>
+                          <div className="flex flex-wrap gap-1.5 pt-1">
+                            {project.selectedCatalogComponents.map(
+                              (component) => (
+                                <span
+                                  key={component.id}
+                                  className="badge badge-xs badge-primary badge-soft"
+                                >
+                                  {component.name}
+                                </span>
+                              ),
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    </Link>
                   </td>
                   <td>{formatDate(project.createdAt, locale)}</td>
                   <td>{formatDate(project.updatedAt, locale)}</td>
