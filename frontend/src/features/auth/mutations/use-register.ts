@@ -24,7 +24,7 @@ export function useRegister() {
       const { data } = response;
 
       tokenStorage.setTokens(data.accessToken, data.refreshToken);
-      showSuccessToast(t("apiErrors.auth.accountCreated"));
+      showSuccessToast(t("toast.auth.accountCreated"));
       router.push("/dashboard");
     },
 
@@ -32,8 +32,8 @@ export function useRegister() {
       const { response } = error;
       showErrorToast(
         response?.data.message
-          ? `${t("apiErrors.auth.register_failed")} ${response?.data.message}`
-          : t("apiErrors.auth.upstream_service_error"),
+          ? `${t("toast.auth.registerFailed")} ${response?.data.message}`
+          : t("toast.auth.serviceUnavailable"),
       );
     },
   });
