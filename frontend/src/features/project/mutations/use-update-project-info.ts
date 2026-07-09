@@ -11,7 +11,10 @@ export function useUpdateProjectInfoMutation() {
       projectApi.updateProjectInfo(id, request),
     onSuccess: async (response) => {
       await queryClient.invalidateQueries({ queryKey: projectQueryKeys.all });
-      queryClient.setQueryData(projectQueryKeys.detail(response.data.id), response.data);
+      queryClient.setQueryData(
+        projectQueryKeys.detail(response.data.id),
+        response,
+      );
     },
   });
 }

@@ -17,7 +17,8 @@ export function getProjectErrorTranslationKey(
     | "toast.project.loadFailed"
     | "toast.project.loadListFailed"
     | "toast.project.saveFailed"
-    | "toast.project.createFailed",
+    | "toast.project.createFailed"
+    | "toast.project.deleteFailed",
 ) {
   return PROJECT_ERROR_TRANSLATION_KEYS[errorCode as keyof typeof PROJECT_ERROR_TRANSLATION_KEYS] ?? fallbackKey;
 }

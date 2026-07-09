@@ -1,9 +1,4 @@
-import type { Metadata } from "next";
-import { NextIntlClientProvider, hasLocale } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
-import { notFound } from "next/navigation";
-import { Analytics } from "@vercel/analytics/next";
-import { cookies } from "next/headers";
+import "@/app/globals.css";
 import {
   buildAbsoluteUrl,
   buildAlternates,
@@ -14,18 +9,19 @@ import {
   TWITTER_DEFAULT_IMAGE_PATH,
 } from "@/config/seo";
 import { routing } from "@/i18n/routing";
-import { buildOrganizationSchema, buildWebsiteSchema } from "@/lib/seo/schema";
 import { serverEnv } from "@/lib/env/server";
-import ThemeProvider from "@/providers/theme-provider";
-import {
-  Cactus_Classical_Serif,
-  Baloo_Bhai_2,
-  Space_Mono,
-} from "next/font/google";
-import "@/app/globals.css";
+import { buildOrganizationSchema, buildWebsiteSchema } from "@/lib/seo/schema";
 import { AxiosLocaleProvider } from "@/providers/AxiosLocaleProvider";
 import { QueryProvider } from "@/providers/QueryProvider";
+import ThemeProvider from "@/providers/theme-provider";
 import ToastProvider from "@/providers/toast-provider";
+import { Analytics } from "@vercel/analytics/next";
+import type { Metadata } from "next";
+import { hasLocale, NextIntlClientProvider } from "next-intl";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { Baloo_Bhai_2, Space_Mono } from "next/font/google";
+import { cookies } from "next/headers";
+import { notFound } from "next/navigation";
 
 const customSans = Baloo_Bhai_2({
   variable: "--font-customSans",

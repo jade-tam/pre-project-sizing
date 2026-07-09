@@ -892,6 +892,26 @@
         "close": "Đóng hộp thoại"
       }
     },
+    "projectDetailsBasicInfo": {
+      "title": "Chỉnh sửa thông tin dự án",
+      "description": "Cập nhật tên và mô tả dự án.",
+      "fields": {
+        "name": {
+          "label": "Tên dự án",
+          "placeholder": "Bảng điều khiển độ trễ tìm kiếm"
+        },
+        "description": {
+          "label": "Mô tả",
+          "placeholder": "Mô hình sizing cho sáng kiến độ trễ tìm kiếm"
+        }
+      },
+      "actions": {
+        "cancel": "Hủy",
+        "save": "Lưu thay đổi",
+        "saving": "Đang lưu...",
+        "close": "Đóng hộp thoại"
+      }
+    },
     "exampleEntities": {
       "title": "Thực thể ví dụ",
       "createAction": "Tạo",

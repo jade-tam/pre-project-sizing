@@ -10,9 +10,11 @@ import { getProjectErrorTranslationKey } from "@/features/project/errors";
 import { useDeleteProjectMutation } from "@/features/project/mutations/use-delete-project";
 import { useUpdateProjectAssumptionsMutation } from "@/features/project/mutations/use-update-project-assumptions";
 import { useUpdateProjectComponentSelectionsMutation } from "@/features/project/mutations/use-update-project-component-selections";
+import { useUpdateProjectInfoMutation } from "@/features/project/mutations/use-update-project-info";
 import { useOwnedProjectQuery } from "@/features/project/queries/use-owned-project-query";
 import { showErrorToast, showSuccessToast } from "@/lib/toast/toast";
 import { ProjectAssumptionsDialog } from "./project-assumptions-dialog";
+import { ProjectBasicInfoDialog } from "./project-basic-info-dialog";
 import { ProjectComponentSelectionDialog } from "./project-component-selection-dialog";
 import { ProjectDeleteDialog } from "./project-delete-dialog";
 
@@ -45,7 +47,9 @@ export function ProjectDetailsPage({ id }: { id: string }) {
   const catalogComponentsQuery = useCatalogComponentsQuery();
   const updateSelectionMutation = useUpdateProjectComponentSelectionsMutation();
   const updateAssumptionsMutation = useUpdateProjectAssumptionsMutation();
+  const updateInfoMutation = useUpdateProjectInfoMutation();
   const deleteProjectMutation = useDeleteProjectMutation();
+  const [basicInfoOpen, setBasicInfoOpen] = useState(false);
   const [selectionOpen, setSelectionOpen] = useState(false);
   const [assumptionsOpen, setAssumptionsOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -132,6 +136,13 @@ export function ProjectDetailsPage({ id }: { id: string }) {
               <span className="badge badge-sm badge-soft badge-primary uppercase tracking-[0.2em]">
                 {t("pages.projectDetails.eyebrow", { id: project.id })}
               </span>
+              <button
+                type="button"
+                className="btn btn-primary btn-sm"
+                onClick={() => setBasicInfoOpen(true)}
+              >
+                {t("pages.projectDetails.actions.edit")}
+              </button>
             </div>
 
             <div className="space-y-2">
@@ -429,6 +440,38 @@ export function ProjectDetailsPage({ id }: { id: string }) {
           {t("pages.projectDetails.actions.delete")}
         </button>
       </div>
+
+      <ProjectBasicInfoDialog
+        open={basicInfoOpen}
+        projectId={projectId}
+        defaultValues={{
+          name: project.name,
+          description: project.description,
+        }}
+        isPending={updateInfoMutation.isPending}
+        onClose={() => setBasicInfoOpen(false)}
+        onSave={async (payload) => {
+          try {
+            await updateInfoMutation.mutateAsync({
+              id: projectId,
+              request: payload,
+            });
+            setBasicInfoOpen(false);
+            showSuccessToast(t("toast.project.updated"));
+          } catch (error) {
+            const errorCode =
+              error instanceof Error ? error.message : undefined;
+            showErrorToast(
+              t(
+                getProjectErrorTranslationKey(
+                  errorCode,
+                  "toast.project.saveFailed",
+                ),
+              ),
+            );
+          }
+        }}
+      />
 
       <ProjectComponentSelectionDialog
         open={selectionOpen}
