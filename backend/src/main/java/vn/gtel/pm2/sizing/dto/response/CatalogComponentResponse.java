@@ -21,7 +21,7 @@ public class CatalogComponentResponse {
     private String capacityUnitDescription;
     private Integer haMinimum;
     private String referenceUrl;
-    private boolean isActive;
+    private boolean active;
     private Instant updatedAt;
     private UUID updatedBy;
     private Instant createdAt;

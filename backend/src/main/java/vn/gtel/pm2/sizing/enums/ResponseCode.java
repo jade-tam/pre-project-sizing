@@ -17,7 +17,8 @@ public enum ResponseCode {
     EMAIL_ALREADY_EXIST,
     CATALOG_COMPONENT_NOT_FOUND,
     PROJECT_NOT_FOUND,
-    UNSUPPORTED_CATALOG_COMPONENT;
+    UNSUPPORTED_CATALOG_COMPONENT,
+    TOO_MANY_REQUESTS;
 
     public String getMessageKey() {
         return name();

@@ -16,10 +16,12 @@ Backend mặc định chạy port `8088`, context path `/pre-project-sizing/api`
 Cấu hình database/SSO nên truyền qua biến môi trường:
 
 ```bash
-export DB_URL=jdbc:postgreql:@localhost:5432/sizing-project
+# Example postgres and redis are running on host 192.168.1.108
+export DB_URL=jdbc:postgresql://192.168.1.108:5432/sizing_project
 export DB_USERNAME=username
 export DB_PASSWORD=password
-export OAUTH_ISSUER_URI=http://localhost:4444
+export REDIS_HOST=192.168.1.108
+# export OAUTH_ISSUER_URI=http://localhost:4444
 ```
 
 ## Frontend

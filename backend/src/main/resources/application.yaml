@@ -45,6 +45,10 @@ spring:
   messages:
     use-code-as-default-message: true
     encoding: UTF-8
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: 6379
 springdoc:
   swagger-ui:
     operationsSorter: method
@@ -55,8 +59,9 @@ logging:
   level:
     root: INFO
     org.flywaydb: DEBUG
-redis:
-  config-file: ${REDIS_CONFIG_FILE:./config/redis.yaml}
+
+#redis:
+#  config-file: ${REDIS_CONFIG_FILE:./config/redis.yaml}
 system:
   configurations:
     cors:
