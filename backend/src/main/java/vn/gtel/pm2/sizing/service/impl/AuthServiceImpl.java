@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.gtel.pm2.sizing.constant.AppConstants;
+import vn.gtel.pm2.sizing.constant.RedisKeys;
 import vn.gtel.pm2.sizing.dto.request.AuthLoginRequest;
 import vn.gtel.pm2.sizing.dto.request.AuthRefreshRequest;
 import vn.gtel.pm2.sizing.dto.request.AuthRegisterRequest;
@@ -19,10 +20,13 @@ import vn.gtel.pm2.sizing.enums.ResponseCode;
 import vn.gtel.pm2.sizing.exception.AuthenticationException;
 import vn.gtel.pm2.sizing.exception.BusinessException;
 import vn.gtel.pm2.sizing.exception.ResourceNotFoundException;
+import vn.gtel.pm2.sizing.redis.RateLimiter;
 import vn.gtel.pm2.sizing.repository.UserRepository;
 import vn.gtel.pm2.sizing.security.CustomUserDetails;
 import vn.gtel.pm2.sizing.security.JwtService;
 import vn.gtel.pm2.sizing.service.AuthService;
+
+import java.time.Duration;
 
 @Slf4j
 @Service
@@ -36,6 +40,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final RateLimiter rateLimiter;
 
     @Override
     @Transactional
@@ -68,6 +73,12 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public AuthResponse login(AuthLoginRequest request) {
+
+        rateLimiter.check(
+                RedisKeys.Auth.loginAttempts(request.getEmail()),
+                5,
+                Duration.ofSeconds(20)
+        );
 
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 request.getEmail(),
