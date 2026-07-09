@@ -892,6 +892,26 @@
         "close": "Close modal"
       }
     },
+    "projectDetailsBasicInfo": {
+      "title": "Edit project information",
+      "description": "Update the project name and description.",
+      "fields": {
+        "name": {
+          "label": "Project name",
+          "placeholder": "Search latency dashboard"
+        },
+        "description": {
+          "label": "Description",
+          "placeholder": "Sizing model for the search latency initiative"
+        }
+      },
+      "actions": {
+        "cancel": "Cancel",
+        "save": "Save changes",
+        "saving": "Saving...",
+        "close": "Close modal"
+      }
+    },
     "exampleEntities": {
       "title": "Example Entities",
       "createAction": "Create",
