@@ -32,7 +32,11 @@ npm install
 npm run dev
 ```
 
-Copy `frontend/.env.example` thành `frontend/.env` và chỉnh lại endpoint/SSO theo môi trường chạy thực tế.
+Copy `frontend/.env.example` thành `frontend/.env` và chỉnh lại api endpoint/SSO theo môi trường chạy thực tế.
+
+```
+NEXT_PUBLIC_REST_API_BASE_URL=http://192.168.1.108:8088/pre-project-sizing/api
+```
 
 Frontend mặc định chạy qua port `3000`. Thay đổi port frontend qua packpage.json
 
