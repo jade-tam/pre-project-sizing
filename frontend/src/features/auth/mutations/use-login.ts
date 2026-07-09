@@ -32,8 +32,8 @@ export function useLogin() {
       const { response } = error;
       showErrorToast(
         response?.data.message
-          ? `${t("apiErrors.auth.register_failed")} ${response?.data.message}`
-          : t("apiErrors.auth.upstream_service_error"),
+          ? `${t("toast.auth.signInFailed")} ${response?.data.message}`
+          : t("toast.auth.serviceUnavailable"),
       );
     },
   });
