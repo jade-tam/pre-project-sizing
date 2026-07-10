@@ -20,6 +20,8 @@ import vn.gtel.pm2.sizing.enums.ResponseCode;
 import vn.gtel.pm2.sizing.exception.AuthenticationException;
 import vn.gtel.pm2.sizing.exception.BusinessException;
 import vn.gtel.pm2.sizing.exception.ResourceNotFoundException;
+import vn.gtel.pm2.sizing.messaging.event.UserRegisteredEvent;
+import vn.gtel.pm2.sizing.messaging.publisher.UserEventPublisher;
 import vn.gtel.pm2.sizing.redis.RateLimiter;
 import vn.gtel.pm2.sizing.repository.UserRepository;
 import vn.gtel.pm2.sizing.security.CustomUserDetails;
@@ -41,6 +43,7 @@ public class AuthServiceImpl implements AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final RateLimiter rateLimiter;
+    private final UserEventPublisher userEventPublisher;
 
     @Override
     @Transactional
@@ -59,6 +62,8 @@ public class AuthServiceImpl implements AuthService {
         User savedUser = userRepository.save(
                 new User(request.getUsername(), passwordEncoder.encode(request.getPassword()), request.getFullName(), request.getEmail(), true)
         );
+
+        userEventPublisher.publishUserRegistered(new UserRegisteredEvent(savedUser.getId(), savedUser.getFullName(), savedUser.getEmail()));
 
         log.info("Registered user username={} email={} with id={}", savedUser.getUsername(), savedUser.getEmail(), savedUser.getId());
 
