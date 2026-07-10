@@ -49,6 +49,11 @@ spring:
     redis:
       host: ${REDIS_HOST:localhost}
       port: 6379
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: 5672
+    username: ${RABBITMQ_USER}
+    password: ${RABBITMQ_PASS}
 springdoc:
   swagger-ui:
     operationsSorter: method
@@ -59,6 +64,8 @@ logging:
   level:
     root: INFO
     org.flywaydb: DEBUG
+
+
 
 #redis:
 #  config-file: ${REDIS_CONFIG_FILE:./config/redis.yaml}

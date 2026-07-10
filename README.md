@@ -21,6 +21,9 @@ export DB_URL=jdbc:postgresql://192.168.1.108:5432/sizing_project
 export DB_USERNAME=username
 export DB_PASSWORD=password
 export REDIS_HOST=192.168.1.108
+export RABBITMQ_HOST=192.168.1.108
+export RABBITMQ_USER=username
+export RABBITMQ_PASS=password
 # export OAUTH_ISSUER_URI=http://localhost:4444
 ```
 
