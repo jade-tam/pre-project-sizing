@@ -15,10 +15,13 @@ public class UserMessagingConfig {
         );
     }
 
+    // Queues ----------------------------------------------------------
     @Bean
     public Queue emailNotificationQueue() {
         return QueueBuilder
                 .durable(RabbitMQConstants.Queue.EMAIL_NOTIFICATION)
+                .deadLetterExchange(RabbitMQConstants.DeadLetter.EXCHANGE)
+                .deadLetterRoutingKey(RabbitMQConstants.DeadLetter.RoutingKey.EMAIL_NOTIFICATION_FAILED)
                 .build();
     }
 
@@ -29,20 +32,20 @@ public class UserMessagingConfig {
                 .build();
     }
 
+    // Bindings ---------------------------------------------------------
     @Bean
-    public Binding emailBinding() {
+    public Binding emailNotificationQueueBinding() {
         return BindingBuilder
                 .bind(emailNotificationQueue())
                 .to(userExchange())
-                .with(RabbitMQConstants.User.Route.REGISTERED);
+                .with(RabbitMQConstants.User.RoutingKey.REGISTERED);
     }
 
     @Bean
-    public Binding pushBinding() {
+    public Binding pushNotificationQueueBinding() {
         return BindingBuilder
                 .bind(pushNotificationQueue())
                 .to(userExchange())
-                .with(RabbitMQConstants.User.Route.REGISTERED);
+                .with(RabbitMQConstants.User.RoutingKey.REGISTERED);
     }
-
 }

@@ -16,7 +16,7 @@ public class UserEventPublisher {
 
         rabbitTemplate.convertAndSend(
                 RabbitMQConstants.User.EXCHANGE,
-                RabbitMQConstants.User.Route.REGISTERED,
+                RabbitMQConstants.User.RoutingKey.REGISTERED,
                 event
         );
     }
