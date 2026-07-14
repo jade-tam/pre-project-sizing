@@ -15,7 +15,7 @@ public class PushNotificationConsumer {
 
         System.out.println(
                 "Sending push notification to user "
-                        + event.id()
+                        + event.getId()
         );
     }
 }
