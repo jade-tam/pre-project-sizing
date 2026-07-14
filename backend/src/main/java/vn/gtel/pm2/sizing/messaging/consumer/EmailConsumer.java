@@ -1,21 +1,23 @@
 package vn.gtel.pm2.sizing.messaging.consumer;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 import vn.gtel.pm2.sizing.constant.RabbitMQConstants;
 import vn.gtel.pm2.sizing.messaging.event.UserRegisteredEvent;
+import vn.gtel.pm2.sizing.service.EmailService;
 
 @Component
+@RequiredArgsConstructor
 public class EmailConsumer {
+
+    private final EmailService emailService;
 
     @RabbitListener(
             queues = RabbitMQConstants.Queue.EMAIL_NOTIFICATION
     )
     public void handle(UserRegisteredEvent event) {
 
-        System.out.println(
-                "Sending welcome email to "
-                        + event.email()
-        );
+        emailService.sendWelcomeEmail(event);
     }
 }

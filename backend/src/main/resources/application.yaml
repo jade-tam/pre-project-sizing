@@ -131,3 +131,8 @@ grpc:
     port: 9090
     address: "*"
     enable-reflection: true
+
+integration:
+  email:
+    base-url: https://email-api.example.com
+    api-key: your-api-key
