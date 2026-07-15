@@ -2,7 +2,7 @@ package vn.gtel.pm2.sizing.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import vn.gtel.pm2.sizing.integration.email.EmailClient;
+import vn.gtel.pm2.sizing.integration.email.EmailFeignClient;
 import vn.gtel.pm2.sizing.integration.email.dto.request.EmailRequest;
 import vn.gtel.pm2.sizing.messaging.event.UserRegisteredEvent;
 import vn.gtel.pm2.sizing.service.EmailService;
@@ -11,7 +11,7 @@ import vn.gtel.pm2.sizing.service.EmailService;
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
 
-    private final EmailClient emailClient;
+    private final EmailFeignClient emailClient;
 
     @Override
     public void sendWelcomeEmail(
