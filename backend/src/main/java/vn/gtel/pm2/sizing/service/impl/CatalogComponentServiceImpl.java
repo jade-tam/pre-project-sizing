@@ -14,13 +14,10 @@ import vn.gtel.pm2.sizing.entity.CatalogComponent;
 import vn.gtel.pm2.sizing.enums.ResponseCode;
 import vn.gtel.pm2.sizing.exception.ResourceNotFoundException;
 import vn.gtel.pm2.sizing.mapper.CatalogComponentMapper;
-import vn.gtel.pm2.sizing.messaging.event.UserRegisteredEvent;
-import vn.gtel.pm2.sizing.messaging.publisher.UserEventPublisher;
 import vn.gtel.pm2.sizing.repository.CatalogComponentRepository;
 import vn.gtel.pm2.sizing.service.CatalogComponentService;
 
 import java.util.List;
-import java.util.UUID;
 
 @Slf4j
 @Service
@@ -29,13 +26,11 @@ public class CatalogComponentServiceImpl implements CatalogComponentService {
 
     private final CatalogComponentRepository catalogComponentRepository;
     private final CatalogComponentMapper catalogComponentMapper;
-    private final UserEventPublisher userEventPublisher;
 
     @Override
     @Transactional(readOnly = true)
     @Cacheable(value = CacheNames.CATALOG_COMPONENTS, key = "'all'")
     public List<CatalogComponentResponse> getAllCatalogComponents() {
-        userEventPublisher.publishUserRegistered(new UserRegisteredEvent(new UUID(234, 234L), "TEST", "asd@gmail.com"));
 
         return catalogComponentMapper.toResponseList(catalogComponentRepository.findAll());
     }
