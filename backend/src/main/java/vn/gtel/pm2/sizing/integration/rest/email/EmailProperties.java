@@ -1,4 +1,4 @@
-package vn.gtel.pm2.sizing.integration.email;
+package vn.gtel.pm2.sizing.integration.rest.email;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

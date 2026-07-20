@@ -7,11 +7,9 @@ import vn.gtel.pm2.email.grpc.v1.EmailRequest;
 import vn.gtel.pm2.email.grpc.v1.EmailResponse;
 import vn.gtel.pm2.email.grpc.v1.EmailServiceGrpc;
 
-
 @GrpcService
 @Slf4j
-public class EmailGrpcService
-        extends EmailServiceGrpc.EmailServiceImplBase {
+public class EmailGrpcService extends EmailServiceGrpc.EmailServiceImplBase {
 
     @Override
     public void sendEmail(

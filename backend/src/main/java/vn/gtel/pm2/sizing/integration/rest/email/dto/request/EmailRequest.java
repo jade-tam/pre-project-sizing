@@ -1,4 +1,4 @@
-package vn.gtel.pm2.sizing.integration.email.dto.request;
+package vn.gtel.pm2.sizing.integration.rest.email.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

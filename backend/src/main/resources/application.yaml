@@ -56,6 +56,14 @@ spring:
     port: 5672
     username: ${RABBITMQ_USER}
     password: ${RABBITMQ_PASS}
+  grpc:
+    server:
+      port: 9090
+    client:
+      channels:
+        email-service:
+          address: static://localhost:9090
+
 springdoc:
   swagger-ui:
     operationsSorter: method
@@ -125,12 +133,6 @@ security:
     secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
     access-token-expiration: 9000      # 15 minutes
     refresh-token-expiration: 604800   # 7 days
-
-grpc:
-  server:
-    port: 9090
-    address: "*"
-    enable-reflection: true
 
 integration:
   email:

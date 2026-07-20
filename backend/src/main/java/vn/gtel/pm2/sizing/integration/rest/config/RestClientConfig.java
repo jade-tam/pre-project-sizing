@@ -1,4 +1,4 @@
-package vn.gtel.pm2.sizing.integration.config;
+package vn.gtel.pm2.sizing.integration.rest.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

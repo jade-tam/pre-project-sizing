@@ -1,9 +1,9 @@
-package vn.gtel.pm2.sizing.integration.email;
+package vn.gtel.pm2.sizing.integration.rest.email;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
-import vn.gtel.pm2.sizing.integration.email.dto.request.EmailRequest;
-import vn.gtel.pm2.sizing.integration.email.dto.response.EmailResponse;
+import vn.gtel.pm2.sizing.integration.rest.email.dto.request.EmailRequest;
+import vn.gtel.pm2.sizing.integration.rest.email.dto.response.EmailResponse;
 
 @Component
 public class EmailClient {
